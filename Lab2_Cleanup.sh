@@ -27,7 +27,7 @@ POLICY_NAME="Lab2S3Policy"
 INSTANCE_PROFILE="Lab2EC2Profile"
 INSTANCE_TAG="Lab2-EC2"
 
-DRY_RUN=true
+DRY_RUN=false
 
 # Known original lab security group.
 EXPECTED_SG_ID="sg-0d05e1376286b618e"
