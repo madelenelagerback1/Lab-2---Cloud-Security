@@ -147,7 +147,7 @@ SG_ID=$(aws ec2 create-security-group \
 echo "Security group created: $SG_ID"
 
 # ==========================================
-# Step (b) - Allow SSH from current IP
+# Step (b) - Add inbound SSH rule
 # ==========================================
 
 aws ec2 authorize-security-group-ingress \
@@ -160,7 +160,7 @@ aws ec2 authorize-security-group-ingress \
 echo "SSH rule added for IP: $MY_IP"
 
 # ==========================================
-# Step (c) - Verify SSH rule
+# Step (c) - Verify SSH is restricted to your IP
 # ==========================================
 
 aws ec2 describe-security-groups \
