@@ -215,7 +215,7 @@ echo "S3 bucket verified."
 # Generate the policy dynamically so that
 # it references the correct S3 bucket.
 
-S3_POLICY_FILE=$(mktemp)
+S3_POLICY_FILE="$(pwd)/Lab2GeneratedPolicy.json"
 trap 'rm -f "$S3_POLICY_FILE"' EXIT
 
 cat > "$S3_POLICY_FILE" <<EOF
@@ -244,7 +244,7 @@ EOF
 
 POLICY_ARN=$(aws iam create-policy \
     --policy-name "$POLICY_NAME" \
-    --policy-document "file://$S3_POLICY_FILE" \
+    --policy-document "file://$(cygpath -m "$S3_POLICY_FILE")" \
     --query "Policy.Arn" \
     --output text)
 
