@@ -15,7 +15,7 @@ set -euo pipefail
 
 # Configuration
 REGION="eu-north-1"
-DRY_RUN=true
+
 
 export AWS_PAGER=""
 
@@ -24,6 +24,7 @@ ROLE_NAME="Lab2EC2Role"
 POLICY_NAME="Lab2S3Policy"
 INSTANCE_PROFILE="Lab2EC2Profile"
 INSTANCE_TAG="Lab2-EC2"
+DRY_RUN=false
 
 # ==========================================
 # Step 1 - Identify AWS environment
@@ -194,11 +195,10 @@ if [ "$PROFILE_ROLES" != "$ROLE_NAME" ]; then
 fi
 
 # Verify IAM role has only expected managed policies.
-
 ATTACHED_POLICIES=$(aws iam list-attached-role-policies \
     --role-name "$ROLE_NAME" \
     --query "AttachedPolicies[].PolicyArn" \
-    --output text)
+    --output text | tr -d '\r')
 
 for ARN in $ATTACHED_POLICIES; do
     if [ "$ARN" != "$POLICY_ARN" ] && \
@@ -210,7 +210,10 @@ done
 
 # Verify custom policy is attached to the lab role.
 
-if [[ " $ATTACHED_POLICIES " != *" $POLICY_ARN "* ]]; then
+if ! printf '%s\n' "$ATTACHED_POLICIES" |
+    tr '\t' '\n' |
+    grep -Fxq "$POLICY_ARN"; then
+
     echo "ERROR: Lab S3 policy is not attached."
     exit 1
 fi
