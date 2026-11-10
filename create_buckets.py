@@ -2,11 +2,15 @@
 import boto3
 from botocore.exceptions import ClientError
 
+# Get the AWS account ID automatically
+sts = boto3.client("sts")
+account_id = sts.get_caller_identity()["Account"]
+
 # Bucket names and AWS regions
 buckets = {
-    "eu-north-1": "d7078e-lab2-python-se-20261109-ml",
-    "eu-central-1": "d7078e-lab2-python-de-20261109-ml",
-     "eu-west-3": "d7078e-lab2-python-fr-20261109-ml"
+    "eu-north-1": f"d7078e-lab2-python-se-{account_id}",
+    "eu-central-1": f"d7078e-lab2-python-de-{account_id}",
+    "eu-west-3": f"d7078e-lab2-python-fr-{account_id}"
 }
 
 for region, bucket_name in buckets.items():
